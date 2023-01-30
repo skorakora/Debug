@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 using Zielona_Alkaida_Launcher.Core;
 
 namespace Updater.Core
@@ -19,6 +20,10 @@ namespace Updater.Core
             {
                 File.Delete(logPath);
             }
+            else
+            {
+                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(logPath));
+            }
 
             file = new FileStream(logPath, FileMode.Create);
 
@@ -32,7 +37,7 @@ namespace Updater.Core
 
         public static void Log(string text)
         {
-            byte[] data = StringToByte(text);
+            byte[] data = StringToByte("[" + DateTime.Now.ToString("h:mm:ss tt") + "]" + " " + text);
 
             file.Write(MergeByteArray(data,endLine), 0, data.Length+2);
 
@@ -41,7 +46,7 @@ namespace Updater.Core
 
         public static void Warning(string text)
         {
-            byte[] data = StringToByte(text);
+            byte[] data = StringToByte("[" + DateTime.Now.ToString("h:mm:ss tt") + "]" + " [WARNING!] " + text);
 
             file.Write(MergeByteArray(data, endLine), 0, data.Length + 2);
 
@@ -52,7 +57,7 @@ namespace Updater.Core
 
         public static void Error(string text)
         {
-            byte[] data = StringToByte(text);
+            byte[] data = StringToByte("[" + DateTime.Now.ToString("h:mm:ss tt") + "]" + " [ERROR!] " + text);
 
             file.Write(MergeByteArray(data, endLine), 0, data.Length + 2);
 
