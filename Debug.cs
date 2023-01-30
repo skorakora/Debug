@@ -34,20 +34,18 @@ namespace Updater.Core
         {
             byte[] data = StringToByte(text);
 
-            file.Write(data, 0, data.Length);
+            file.Write(MergeByteArray(data,endLine), 0, data.Length+2);
 
-            Console.BackgroundColor = ConsoleColor.Red;
             Console.WriteLine("[" + DateTime.Now.ToString("h:mm:ss tt") + "]" + " " + text);
-            Console.BackgroundColor = ConsoleColor.Black;
         }
 
         public static void Warning(string text)
         {
             byte[] data = StringToByte(text);
 
-            file.Write(data, 0, data.Length);
+            file.Write(MergeByteArray(data, endLine), 0, data.Length + 2);
 
-            Console.BackgroundColor = ConsoleColor.Red;
+            Console.BackgroundColor = ConsoleColor.Yellow;
             Console.WriteLine("[" + DateTime.Now.ToString("h:mm:ss tt") + "]" + " [WARNING!] " + text);
             Console.BackgroundColor = ConsoleColor.Black;
         }
@@ -56,7 +54,7 @@ namespace Updater.Core
         {
             byte[] data = StringToByte(text);
 
-            file.Write(data, 0, data.Length);
+            file.Write(MergeByteArray(data, endLine), 0, data.Length + 2);
 
             Console.BackgroundColor = ConsoleColor.Red;
             Console.WriteLine("["+DateTime.Now.ToString("h:mm:ss tt")+"]"+" [ERROR!] "+text);
@@ -102,5 +100,16 @@ namespace Updater.Core
         {
             return Encoding.UTF8.GetBytes(text);
         }
+
+        private static byte[] MergeByteArray(byte[] data, byte[] appendData)
+        {
+            List<byte> newData = new List<byte>();
+            newData.AddRange(data);
+            newData.AddRange(appendData);
+
+            return newData.ToArray();
+        }
+
+        private static byte[] endLine = { 0x0D, 0x0A };
     }
 }
